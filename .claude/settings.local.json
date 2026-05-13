@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\" -Force | Select-Object Name, @{Name=\"Type\"; Expression={if\\($_.PSIsContainer\\){\"DIR\"} else {\"FILE\"}}})",
+      "Bash(cd \"/c/Users/davib/Documents/Scripts/Sala Virtual Kerygma\" && find . -maxdepth 1 -type f -o -maxdepth 1 -type d | head -30)",
+      "Read(//c/c/Users/davib/Documents/Scripts/**)",
+      "Bash(mkdir -p \"c:/Users/davib/Documents/Scripts/Sala Virtual Kerygma/kerygma-react/src/lib\")",
+      "Bash(not exist *)",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npm audit *)",
+      "Bash(npx vite *)",
+      "Bash(copy \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\public\\\\images\\\\logoKerygma.png\" \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\kerygma-react\\\\public\\\\favicon.png\")",
+      "PowerShell(Copy-Item \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\public\\\\images\\\\logoKerygma.png\" \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\kerygma-react\\\\public\\\\favicon.png\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\kerygma-react\\\\public\")",
+      "PowerShell(Copy-Item \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\public\\\\images\\\\logoKerygma.png\" \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\kerygma-react\\\\public\\\\favicon.png\" -Force)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\davib\\\\Documents\\\\Scripts\\\\Sala Virtual Kerygma\\\\kerygma-react\" -Recurse -File | Where-Object { $_.Extension -match '\\\\.\\(png|jpg|jpeg|ico|svg|webp|gif\\)$' -and $_.FullName -notmatch 'node_modules|dist' } | Select-Object FullName, LastWriteTime | Sort-Object LastWriteTime -Descending)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\davib\\Documents\\Scripts\\Sala Virtual Kerygma\\kerygma-react\\src"
+    ]
+  }
+}
