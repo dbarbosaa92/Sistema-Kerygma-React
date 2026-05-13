@@ -11,10 +11,11 @@
     "@supabase/supabase-js": "^2.45.0",
     "react":                 "^18.3.1",
     "react-dom":             "^18.3.1",
-    "react-router-dom":      "^6.26.0"
-  },
-  "devDependencies": {
+    "react-router-dom":      "^6.26.0",
     "@vitejs/plugin-react": "^4.3.1",
     "vite":                 "^6.3.5"
+  },
+  "devDependencies": {
+    
   }
 }
