@@ -9,9 +9,8 @@ const FALLBACK_IMG = 'https://images.unsplash.com/photo-1516321318423-f06f85e504
 
 export default function Dashboard() {
   const { profile, isTeacher } = useAuth()
-  const [courses,     setCourses]     = useState([])
-  const [submissions, setSubmissions] = useState([])
-  const [loading,     setLoading]     = useState(true)
+  const [courses,  setCourses]  = useState([])
+  const [loading,  setLoading]  = useState(true)
 
   useEffect(() => {
     if (profile) loadDashboard()
@@ -19,15 +18,11 @@ export default function Dashboard() {
 
   async function loadDashboard() {
     setLoading(true)
-    const [coursesRes, subsRes] = await Promise.all([
+    const [coursesRes] = await Promise.all([
       supabase.from('courses').select(`
         id, title, description, image_url,
         lessons ( id, lesson_progress ( completed, user_id ) )
       `).order('created_at'),
-      supabase.from('submissions').select(`
-        id, score, status,
-        exams ( id, title, courses ( title ) )
-      `).eq('user_id', profile.id).order('start_time', { ascending: false }).limit(10),
     ])
 
     const coursesWithProgress = (coursesRes.data ?? []).map(course => {
@@ -40,7 +35,6 @@ export default function Dashboard() {
     })
 
     setCourses(coursesWithProgress)
-    setSubmissions(subsRes.data ?? [])
     setLoading(false)
   }
 
@@ -102,38 +96,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Mini Boletim ── */}
       <div className="col-md-4">
-        <div className="card shadow border-0 bg-white rounded-4 overflow-hidden">
-          <div className="card-header bg-primary text-white py-3">
-            <h5 className="mb-0 text-white"><i className="fas fa-clipboard-check" /> Meu Boletim</h5>
-          </div>
-          <div className="card-body p-0">
-            <ul className="list-group list-group-flush">
-              {submissions.length === 0 ? (
-                <li className="list-group-item text-center text-muted p-4">
-                  Nenhuma atividade avaliativa feita ainda.
-                </li>
-              ) : (
-                submissions.map(sub => {
-                  const completed = sub.status === 'completed'
-                  const passed    = completed && parseFloat(sub.score) >= 70
-                  return (
-                    <li key={sub.id} className="list-group-item p-3 d-flex justify-content-between align-items-center">
-                      <div>
-                        <h6 className="mb-0 fw-bold">{sub.exams?.title}</h6>
-                        <small className="text-muted">{sub.exams?.courses?.title}</small>
-                      </div>
-                      <span className={`badge ${passed ? 'badge-score-pass' : 'badge-score-fail'} fs-6 px-3 py-2`}>
-                        {completed ? `Nota: ${parseFloat(sub.score).toFixed(1)}%` : 'Pendente'}
-                      </span>
-                    </li>
-                  )
-                })
-              )}
-            </ul>
-          </div>
-        </div>
         <CalendarWidget />
       </div>
     </div>

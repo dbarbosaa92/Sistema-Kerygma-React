@@ -99,14 +99,14 @@ export default function AdminDashboard() {
       const ext  = courseImageFile.name.split('.').pop()
       const path = `course-covers/${Date.now()}.${ext}`
       const { error: storageErr } = await supabase.storage
-        .from('lesson-files')
+        .from('course-covers')
         .upload(path, courseImageFile, { contentType: courseImageFile.type })
       if (storageErr) {
         showAlert('Erro no upload da imagem: ' + storageErr.message, 'danger')
         setSaving(false)
         return
       }
-      const { data: urlData } = supabase.storage.from('lesson-files').getPublicUrl(path)
+      const { data: urlData } = supabase.storage.from('course-covers').getPublicUrl(path)
       imageUrl = urlData.publicUrl
     }
 

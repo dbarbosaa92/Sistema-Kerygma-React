@@ -35,16 +35,19 @@ export default function CourseEdit() {
   const navigate = useNavigate()
   const fileInputRef = useRef()
 
-  const [course,  setCourse]  = useState(null)
-  const [lessons, setLessons] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [saving,  setSaving]  = useState(false)
-  const [msg,     setMsg]     = useState('')
+  const coverImageRef = useRef()
 
-  const [courseForm, setCourseForm] = useState({ title: '', description: '', image_url: '' })
-  const [lessonForm, setLessonForm] = useState({ title: '', content_type: 'video', media_url: '' })
-  const [attachForm, setAttachForm] = useState({ lesson_id: '', title: '' })
-  const [uploadFile, setUploadFile] = useState(null)
+  const [course,         setCourse]         = useState(null)
+  const [lessons,        setLessons]        = useState([])
+  const [loading,        setLoading]        = useState(true)
+  const [saving,         setSaving]         = useState(false)
+  const [msg,            setMsg]            = useState('')
+
+  const [courseForm,     setCourseForm]     = useState({ title: '', description: '', image_url: '' })
+  const [coverImageFile, setCoverImageFile] = useState(null)
+  const [lessonForm,     setLessonForm]     = useState({ title: '', content_type: 'video', media_url: '' })
+  const [attachForm,     setAttachForm]     = useState({ lesson_id: '', title: '' })
+  const [uploadFile,     setUploadFile]     = useState(null)
 
   useEffect(() => { loadCourse() }, [id])
 
@@ -64,7 +67,28 @@ export default function CourseEdit() {
   async function saveCourse(e) {
     e.preventDefault()
     setSaving(true)
-    await supabase.from('courses').update(courseForm).eq('id', id)
+
+    let updatedForm = { ...courseForm }
+
+    if (coverImageFile) {
+      const ext  = coverImageFile.name.split('.').pop()
+      const path = `course-covers/${Date.now()}.${ext}`
+      const { error: storageErr } = await supabase.storage
+        .from('course-covers')
+        .upload(path, coverImageFile, { contentType: coverImageFile.type })
+      if (storageErr) {
+        setMsg('Erro no upload: ' + storageErr.message)
+        setSaving(false)
+        return
+      }
+      const { data: urlData } = supabase.storage.from('course-covers').getPublicUrl(path)
+      updatedForm.image_url = urlData.publicUrl
+    }
+
+    await supabase.from('courses').update(updatedForm).eq('id', id)
+    setCourseForm(updatedForm)
+    setCoverImageFile(null)
+    if (coverImageRef.current) coverImageRef.current.value = ''
     setMsg('Curso atualizado!')
     setTimeout(() => setMsg(''), 3000)
     setSaving(false)
@@ -154,9 +178,36 @@ export default function CourseEdit() {
                 onChange={e => setCourseForm(p => ({ ...p, description: e.target.value }))} />
             </div>
             <div className="col-12">
-              <label className="form-label">URL da Imagem de Capa</label>
-              <input className="form-control" value={courseForm.image_url}
-                onChange={e => setCourseForm(p => ({ ...p, image_url: e.target.value }))} />
+              <label className="form-label">Imagem de Capa</label>
+              <input
+                type="file"
+                className="form-control mb-2"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+                ref={coverImageRef}
+                onChange={e => {
+                  const file = e.target.files[0] || null
+                  setCoverImageFile(file)
+                  if (file) setCourseForm(p => ({ ...p, image_url: '' }))
+                }}
+              />
+              <div className="text-center text-muted small my-1">— ou cole uma URL —</div>
+              <input
+                className="form-control"
+                placeholder="https://..."
+                value={courseForm.image_url}
+                disabled={!!coverImageFile}
+                onChange={e => setCourseForm(p => ({ ...p, image_url: e.target.value }))}
+              />
+              {(coverImageFile || courseForm.image_url) && (
+                <img
+                  src={coverImageFile ? URL.createObjectURL(coverImageFile) : courseForm.image_url}
+                  alt="preview"
+                  className="mt-2 rounded w-100"
+                  style={{ height: '120px', objectFit: 'cover' }}
+                  onError={e => { e.target.style.display = 'none' }}
+                  onLoad={e => { e.target.style.display = 'block' }}
+                />
+              )}
             </div>
             <div className="col-12 text-end">
               <button className="btn btn-primary" disabled={saving}>Salvar</button>
