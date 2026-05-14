@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import LoadingSpinner from '../../components/ui/LoadingSpinner'
@@ -46,6 +46,9 @@ export default function AdminDashboard() {
   const [loading,        setLoading]        = useState(true)
 
   // Formulários
+  const courseImageRef = useRef()
+  const [courseImageFile, setCourseImageFile] = useState(null)
+
   const [courseForm,  setCourseForm]  = useState(EMPTY_COURSE)
   const [userForm,    setUserForm]    = useState(EMPTY_USER)
   const [examForm,    setExamForm]    = useState(EMPTY_EXAM)
@@ -89,9 +92,33 @@ export default function AdminDashboard() {
   async function handleCreateCourse(e) {
     e.preventDefault()
     setSaving(true)
-    const { error } = await supabase.from('courses').insert(courseForm)
+
+    let imageUrl = courseForm.image_url
+
+    if (courseImageFile) {
+      const ext  = courseImageFile.name.split('.').pop()
+      const path = `course-covers/${Date.now()}.${ext}`
+      const { error: storageErr } = await supabase.storage
+        .from('lesson-files')
+        .upload(path, courseImageFile, { contentType: courseImageFile.type })
+      if (storageErr) {
+        showAlert('Erro no upload da imagem: ' + storageErr.message, 'danger')
+        setSaving(false)
+        return
+      }
+      const { data: urlData } = supabase.storage.from('lesson-files').getPublicUrl(path)
+      imageUrl = urlData.publicUrl
+    }
+
+    const { error } = await supabase.from('courses').insert({ ...courseForm, image_url: imageUrl })
     if (error) { showAlert('Erro: ' + error.message, 'danger') }
-    else { showAlert('Curso cadastrado com sucesso!'); setCourseForm(EMPTY_COURSE); loadAll() }
+    else {
+      showAlert('Curso cadastrado com sucesso!')
+      setCourseForm(EMPTY_COURSE)
+      setCourseImageFile(null)
+      if (courseImageRef.current) courseImageRef.current.value = ''
+      loadAll()
+    }
     setSaving(false)
   }
 
@@ -325,10 +352,36 @@ export default function AdminDashboard() {
                       onChange={e => setCourseForm(p => ({ ...p, description: e.target.value }))} />
                   </div>
                   <div className="col-md-4">
-                    <label className="form-label fw-bold small">URL da Imagem</label>
-                    <input className="form-control" placeholder="https://..."
+                    <label className="form-label fw-bold small">Capa do Curso</label>
+                    <input
+                      type="file"
+                      className="form-control mb-2"
+                      accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+                      ref={courseImageRef}
+                      onChange={e => {
+                        const file = e.target.files[0] || null
+                        setCourseImageFile(file)
+                        if (file) setCourseForm(p => ({ ...p, image_url: '' }))
+                      }}
+                    />
+                    <div className="text-center text-muted small my-1">— ou cole uma URL —</div>
+                    <input
+                      className="form-control"
+                      placeholder="https://..."
                       value={courseForm.image_url}
-                      onChange={e => setCourseForm(p => ({ ...p, image_url: e.target.value }))} />
+                      disabled={!!courseImageFile}
+                      onChange={e => setCourseForm(p => ({ ...p, image_url: e.target.value }))}
+                    />
+                    {(courseImageFile || courseForm.image_url) && (
+                      <img
+                        src={courseImageFile ? URL.createObjectURL(courseImageFile) : courseForm.image_url}
+                        alt="preview"
+                        className="mt-2 rounded w-100"
+                        style={{ height: '80px', objectFit: 'cover' }}
+                        onError={e => { e.target.style.display = 'none' }}
+                        onLoad={e => { e.target.style.display = 'block' }}
+                      />
+                    )}
                   </div>
                   <div className="col-12 mt-3">
                     <button className="btn btn-primary rounded-pill px-4" disabled={saving}>
