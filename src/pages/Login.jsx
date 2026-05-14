@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Login() {
-  const { session, signIn } = useAuth()
+  const { session, loading: authLoading, signIn } = useAuth()
   const navigate = useNavigate()
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
   const [error,    setError]    = useState('')
   const [loading,  setLoading]  = useState(false)
 
-  // Redireciona automaticamente quando a sessão for estabelecida
+  // Redireciona se já estiver logado (ex: voltar para /login com sessão ativa)
   useEffect(() => {
-    if (session) navigate('/dashboard', { replace: true })
-  }, [session])
+    if (!authLoading && session) navigate('/dashboard', { replace: true })
+  }, [authLoading, session])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -21,17 +21,14 @@ export default function Login() {
     setLoading(true)
     try {
       await signIn(email.trim(), password)
-      // o useEffect acima cuida do redirecionamento
+      navigate('/dashboard', { replace: true })
     } catch (err) {
       const msg = err?.message ?? ''
       if (msg.includes('Email not confirmed')) {
-        setError('E-mail não confirmado. Desative "Confirm email" nas configurações do Supabase.')
-      } else if (msg.includes('Invalid login credentials')) {
-        setError('E-mail ou senha inválidos.')
+        setError('E-mail não confirmado. Entre em contato com a diretoria do Kerygma.')
       } else {
-        setError(msg || 'Erro ao fazer login.')
+        setError('Usuário não cadastrado ou senha incorreta. Favor entrar em contato com a diretoria do Kerygma.')
       }
-    } finally {
       setLoading(false)
     }
   }

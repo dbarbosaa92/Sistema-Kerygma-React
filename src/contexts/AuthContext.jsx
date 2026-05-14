@@ -9,14 +9,8 @@ export function AuthProvider({ children }) {
   const [loading,  setLoading]  = useState(true)
 
   useEffect(() => {
-    // Carrega sessão inicial
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session) fetchProfile(session.user.id)
-      else setLoading(false)
-    })
-
-    // Escuta mudanças de sessão (login / logout / refresh)
+    // onAuthStateChange já dispara INITIAL_SESSION na subscrição,
+    // eliminando a necessidade de getSession separado (evita fetchProfile duplo)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session)
@@ -45,9 +39,10 @@ export function AuthProvider({ children }) {
   }
 
   async function signIn(email, password) {
+    setLoading(true)
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
-      console.error('[AuthContext] signIn error:', error.message)
+      setLoading(false)
       throw error
     }
     return data
