@@ -434,6 +434,145 @@ a:hover { color: var(--navy-hover); }
 .badge-grade-low  { background: var(--navy) !important; color: var(--white) !important; font-weight: 600 !important; }
 .badge-grade-high { background: var(--gold) !important; color: var(--navy) !important; font-weight: 600 !important; }
 
+/* ── Login ── */
+.login-page {
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem);
+    position: relative;
+    z-index: 1;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 1.25rem;
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    box-shadow: 0 4px 32px rgba(26, 43, 92, 0.10);
+    border: 1px solid rgba(26, 43, 92, 0.08);
+}
+
+.login-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--navy) !important;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+}
+
+/* ── Notification Popup ── */
+@keyframes notifFadeIn  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes notifSlideUp { from { opacity: 0; transform: translateY(32px) scale(0.97) } to { opacity: 1; transform: translateY(0) scale(1) } }
+
+.notif-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1055;
+    background: rgba(15, 23, 54, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: notifFadeIn 0.2s ease;
+}
+
+.notif-card {
+    background: #fff;
+    border-radius: 1.25rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 64px rgba(26, 43, 92, 0.22);
+    overflow: hidden;
+    animation: notifSlideUp 0.3s ease;
+}
+
+.notif-header {
+    background: var(--navy);
+    color: #fff;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notif-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.notif-title    { font-family: 'League Spartan', sans-serif; font-size: 1.15rem; font-weight: 700; color: #fff; }
+.notif-subtitle { font-size: 0.82rem; opacity: 0.72; color: #fff; margin-top: 1px; }
+
+.notif-body {
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+}
+
+.notif-item {
+    display: flex;
+    gap: 0.875rem;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+}
+
+.notif-item--border { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 1rem; margin-top: 0.5rem; }
+
+.notif-item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.notif-item-content { flex: 1; min-width: 0; }
+
+.notif-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+.notif-item-title { font-weight: 600; font-size: 0.92rem; color: var(--navy); line-height: 1.3; }
+.notif-item-body  { font-size: 0.83rem; color: var(--text-soft); margin-top: 2px; line-height: 1.4; }
+.notif-item-date  { font-size: 0.72rem; color: #aaa; margin-top: 4px; }
+
+.notif-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    justify-content: flex-end;
+    background: rgba(245,244,240,0.6);
+}
+
 @media (max-width: 992px) {
     .boletim-sheet-hero { flex-direction: column; align-items: stretch; }
     .sheet-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

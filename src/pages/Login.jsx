@@ -34,15 +34,10 @@ export default function Login() {
   }
 
   return (
-    <div
-      className="min-vh-100 d-flex align-items-center justify-content-center"
-      style={{ background: 'var(--navy)' }}
-    >
-      <div className="card shadow" style={{ width: '100%', maxWidth: 420 }}>
-        <div className="card-body p-5">
-          <h3 className="text-center mb-4" style={{ color: 'var(--navy)', fontWeight: 700 }}>
-            Sala Virtual Kerygma
-          </h3>
+    <div className="login-page">
+      <div className="login-content">
+        <div className="login-card">
+          <h3 className="login-title">Sala Virtual Kerygma</h3>
 
           {error && (
             <div className="alert alert-danger py-2 small">{error}</div>

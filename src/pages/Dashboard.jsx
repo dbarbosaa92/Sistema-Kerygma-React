@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import CalendarWidget from '../components/ui/CalendarWidget'
+import NotificationPopup from '../components/ui/NotificationPopup'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
@@ -22,7 +23,7 @@ export default function Dashboard() {
       supabase.from('courses').select(`
         id, title, description, image_url,
         lessons ( id, lesson_progress ( completed, user_id ) )
-      `).order('created_at'),
+      `).order('created_at', { ascending: false }),
     ])
 
     const coursesWithProgress = (coursesRes.data ?? []).map(course => {
@@ -41,6 +42,9 @@ export default function Dashboard() {
   if (loading) return <LoadingSpinner />
 
   return (
+    <>
+    <NotificationPopup />
+
     <div className="row g-4">
       {/* ── Cursos ── */}
       <div className="col-md-8">
@@ -100,5 +104,6 @@ export default function Dashboard() {
         <CalendarWidget />
       </div>
     </div>
+    </>
   )
 }
