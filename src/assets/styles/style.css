@@ -338,7 +338,13 @@ a:hover { color: var(--navy-hover); }
     }
     .landing-about {
         grid-template-columns: 1fr !important;
-        padding: 24px 16px !important;
+        padding: 28px 16px !important;
+    }
+    .landing-about-text {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
     }
     .landing-features-grid {
         grid-template-columns: repeat(2, 1fr) !important;

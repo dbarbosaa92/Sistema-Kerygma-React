@@ -31,6 +31,7 @@ export default function LandingPage() {
   const navigate = useNavigate()
   const [depoimentos, setDepoimentos] = useState([])
   const [docentes,    setDocentes]    = useState([])
+  const [aberto,      setAberto]      = useState(null)
 
   const docentesDuplicados = [...docentes, ...docentes]
   const duracaoCarrossel = `${Math.max(docentes.length, 1) * 6}s`
@@ -263,23 +264,37 @@ export default function LandingPage() {
             <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#1a2744', margin: '12px 0 16px', fontFamily: "'League Spartan', sans-serif", fontWeight: 800 }}>
               Uma escola para equipar o corpo de Cristo
             </h2>
-            <p style={{ color: '#555', lineHeight: 1.75, fontSize: 15 }}>
+            <p className="landing-about-text" style={{ color: '#555', lineHeight: 1.75, fontSize: 15 }}>
               O Seminário Kerygma nasceu da visão de formar cristãos comprometidos com a Palavra de Deus e com a missão da Igreja. Através de um currículo cuidadosamente estruturado, unimos profundidade bíblica, prática ministerial e formação de caráter.
             </p>
-            <p style={{ color: '#555', lineHeight: 1.75, fontSize: 15, marginTop: 12 }}>
+            <p className="landing-about-text" style={{ color: '#555', lineHeight: 1.75, fontSize: 15, marginTop: 12 }}>
               Nossa sala virtual permite que alunos de qualquer lugar acessem o conteúdo com qualidade e organização, no seu próprio ritmo.
             </p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {pilares.map(p => (
-              <div key={p.titulo} style={{ background: '#f5f4f0', borderRadius: 12, padding: '18px 20px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(200,169,110,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <i className={`fas ${p.icone}`} style={{ color: '#c8a96e', fontSize: 16 }} />
+            {[
+              { icone: 'ti ti-bible',       nome: 'Base bíblica sólida',   desc: 'Ensino fundamentado nas Escrituras com profundidade e rigor teológico.' },
+              { icone: 'ti ti-users',       nome: 'Comunidade ativa',       desc: 'Uma rede de alunos e líderes comprometidos com o crescimento mútuo.' },
+              { icone: 'ti ti-certificate', nome: 'Formação certificada',   desc: 'Ao concluir o curso, o aluno recebe certificado reconhecido pelo seminário.' },
+            ].map((item, i) => (
+              <div key={i} style={{ borderBottom: '0.5px solid #e0ddd8' }}>
+                <div
+                  onClick={() => setAberto(aberto === i ? null : i)}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0', cursor: 'pointer' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '30px', height: '30px', background: 'rgba(26,39,68,0.06)', borderRadius: '7px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <i className={item.icone} style={{ color: '#c8a96e', fontSize: '14px' }} />
+                    </div>
+                    <span style={{ fontSize: '13px', fontWeight: 500, color: '#1a2744' }}>{item.nome}</span>
+                  </div>
+                  <i className={aberto === i ? 'ti ti-chevron-down' : 'ti ti-chevron-right'} style={{ color: '#aaa', fontSize: '14px', transition: 'transform 0.2s' }} />
                 </div>
-                <div>
-                  <div style={{ fontWeight: 700, color: '#1a2744', fontSize: 15, marginBottom: 4 }}>{p.titulo}</div>
-                  <div style={{ color: '#666', fontSize: 13, lineHeight: 1.6 }}>{p.desc}</div>
-                </div>
+                {aberto === i && (
+                  <div style={{ fontSize: '12px', color: '#666', lineHeight: 1.6, paddingBottom: '12px', paddingLeft: '40px' }}>
+                    {item.desc}
+                  </div>
+                )}
               </div>
             ))}
           </div>
