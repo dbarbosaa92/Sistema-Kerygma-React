@@ -92,9 +92,115 @@ export default function Course() {
   if (!course)  return <div className="container py-5"><p>Curso não encontrado.</p></div>
 
   const activeLessonArchives = activeLesson?.lesson_attachments ?? []
+  const completedCount = lessons.filter(l => progress[l.id]).length
+  const progressPct    = lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0
 
   return (
-    <div className="row">
+    <>
+    {/* ── Layout Mobile ── */}
+    <div className="d-md-none aula-mobile-wrapper">
+
+      {/* Cabeçalho */}
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <span style={{ color: '#1a2744', fontSize: 14, fontWeight: 500 }}>{course.title}</span>
+        <span style={{ color: '#888', fontSize: 11 }}>{progressPct}% concluído</span>
+      </div>
+
+      {/* Vídeo em destaque */}
+      {activeLesson && (
+        <div className="mb-2" style={{ borderRadius: 10, overflow: 'hidden' }}>
+          {activeLesson.content_type === 'video' ? (
+            <video controls className="w-100" style={{ borderRadius: 10, display: 'block' }}>
+              <source src={activeLesson.media_url} type="video/mp4" />
+              Seu navegador não suporta vídeos.
+            </video>
+          ) : (
+            <div className="ratio ratio-16x9" style={{ borderRadius: 10, overflow: 'hidden' }}>
+              <iframe
+                src={activeLesson.media_url}
+                title={activeLesson.title}
+                frameBorder="0"
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Barra de progresso */}
+      <div className="aula-progress-bar">
+        <div className="aula-progress-fill" style={{ width: `${progressPct}%` }} />
+      </div>
+
+      {/* Aulas do curso */}
+      <div className="aula-section-label">Aulas do curso</div>
+      {lessons.map(lesson => (
+        <div
+          key={lesson.id}
+          className="aula-item-card"
+          onClick={() => selectLesson(lesson)}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className={`aula-check-circle${progress[lesson.id] ? ' done' : ''}`}>
+            {progress[lesson.id] && (
+              <i className="fas fa-check" style={{ color: '#fff', fontSize: 9 }} />
+            )}
+          </div>
+          <div className="flex-grow-1" style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 13, color: '#1a2744', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {lesson.title}
+            </div>
+            {lesson.duration_minutes && (
+              <div style={{ fontSize: 11, color: '#888' }}>{lesson.duration_minutes} min</div>
+            )}
+          </div>
+          <i className="fas fa-play" style={{ color: '#1a2744', fontSize: 11, flexShrink: 0 }} />
+        </div>
+      ))}
+
+      {/* Materiais da aula */}
+      <div className="aula-section-label">Materiais da aula</div>
+      {activeLessonArchives.length === 0 ? (
+        <p style={{ color: '#aaa', fontSize: 12, margin: 0 }}>Nenhum arquivo disponível</p>
+      ) : (
+        activeLessonArchives.map(att => (
+          <div key={att.id} className="aula-item-card">
+            <i className={`fas ${fileIcon(att.mime_type)}`} style={{ color: '#c8a96e', fontSize: 18, flexShrink: 0 }} />
+            <div className="flex-grow-1" style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13, color: '#1a2744', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {att.title}
+              </div>
+            </div>
+            <button
+              onClick={() => downloadAttachment(att)}
+              style={{ background: 'none', border: 'none', color: '#1a2744', fontSize: 16, cursor: 'pointer', flexShrink: 0, padding: 0 }}
+              aria-label="Baixar arquivo"
+            >
+              ⬇
+            </button>
+          </div>
+        ))
+      )}
+
+      {/* Card de avaliação */}
+      {exams.map(exam => (
+        <Link key={exam.id} to={`/exams/${exam.id}`} className="text-decoration-none">
+          <div className="aula-avaliacao-card">
+            <i className="fas fa-clipboard-list" style={{ color: '#c8a96e', fontSize: 18, flexShrink: 0 }} />
+            <div className="flex-grow-1" style={{ color: '#fff', fontSize: 13, fontWeight: 500, minWidth: 0 }}>
+              {exam.title}
+            </div>
+            <span style={{ background: 'rgba(200,169,110,0.2)', color: '#c8a96e', borderRadius: 6, padding: '2px 8px', fontSize: 11, fontWeight: 600, flexShrink: 0 }}>
+              {exam.duration_minutes} min
+            </span>
+          </div>
+        </Link>
+      ))}
+    </div>
+
+    {/* ── Layout Desktop ── */}
+    <div className="row d-none d-md-flex">
       {/* ── Sidebar ── */}
       <div className="col-md-3">
         {/* Conteúdos */}
@@ -248,5 +354,6 @@ export default function Course() {
         )}
       </div>
     </div>
+    </>
   )
 }

@@ -838,6 +838,73 @@ a:hover { color: var(--navy-hover); }
         flex-shrink: 0;
     }
 
+    /* Tela de aulas mobile */
+    .aula-mobile-wrapper {
+        padding: 12px;
+        background: #f5f4f0;
+        min-height: 100vh;
+    }
+
+    .aula-progress-bar {
+        height: 3px;
+        background: #e8e5e0;
+        border-radius: 2px;
+        margin-bottom: 14px;
+    }
+
+    .aula-progress-fill {
+        height: 3px;
+        background: #c8a96e;
+        border-radius: 2px;
+    }
+
+    .aula-section-label {
+        font-size: 10px;
+        font-weight: 500;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+        margin-top: 14px;
+    }
+
+    .aula-item-card {
+        background: #fff;
+        border-radius: 8px;
+        border: 0.5px solid #e0ddd8;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+
+    .aula-check-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1.5px solid #e0ddd8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .aula-check-circle.done {
+        background: #c8a96e;
+        border-color: #c8a96e;
+    }
+
+    .aula-avaliacao-card {
+        background: #1a2744;
+        border-radius: 8px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 8px;
+    }
+
     /* Boletim — 4 cards lado a lado no mobile */
     .sheet-summary-grid {
         grid-template-columns: repeat(4, 1fr);
