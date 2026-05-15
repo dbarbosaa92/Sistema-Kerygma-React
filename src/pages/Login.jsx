@@ -102,6 +102,13 @@ export default function Login() {
         </div>
 
         <div className="login-form-card">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            style={{ background: 'none', border: 'none', color: '#888', fontSize: '13px', cursor: 'pointer', padding: 0, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            ← Voltar para a página anterior
+          </button>
           <h2 className="login-right-title">Bem-vindo de volta</h2>
 
           {error && (

@@ -83,12 +83,12 @@ export default function LandingPage() {
     <div style={{ fontFamily: "'Source Sans 3', sans-serif", color: '#2e3442' }}>
 
       {/* ── Navbar ── */}
-      <nav style={{ background: '#1a2744', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+      <nav className="landing-nav" style={{ background: '#1a2744', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src="/logoInsta.jpg" alt="Seminário Kerygma" style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid rgba(200,169,110,0.5)' }} />
           <span className="kerygma-font" style={{ color: '#c8a96e', fontSize: '1.2rem' }}>Seminário Kerygma</span>
         </div>
-        <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+        <div className="landing-nav-links" style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
           <a href="#sobre"    style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Sobre</a>
           <a href="#docentes" style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Docentes</a>
           <a href="#contato"  style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Contato</a>
@@ -102,7 +102,7 @@ export default function LandingPage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section style={{
+      <section className="landing-hero" style={{
         background: '#f5f4f0',
         padding: '48px 64px',
         display: 'grid',
@@ -166,7 +166,7 @@ export default function LandingPage() {
         </div>
 
         {/* Coluna direita — card azul com funcionalidades */}
-        <div style={{
+        <div className="landing-hero-right" style={{
           background: '#1a2744',
           borderRadius: '14px',
           padding: '24px'
@@ -204,15 +204,15 @@ export default function LandingPage() {
 
       {/* ── Estatísticas ── */}
       <section ref={statsRef} style={{ background: '#fff', borderTop: '0.5px solid #e0ddd8', borderBottom: '0.5px solid #e0ddd8' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', maxWidth: '900px', margin: '0 auto' }}>
+        <div className="landing-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', maxWidth: '900px', margin: '0 auto' }}>
           {[
             { id: 'stat-alunos',      target: 200, suffix: '+', label: 'Alunos formados' },
             { id: 'stat-disciplinas', target: 40,  suffix: '+', label: 'Disciplinas' },
             { id: 'stat-anos',        target: 11,  suffix: '',  label: 'Anos de história' },
           ].map((stat, i, arr) => (
-            <div key={stat.id} style={{ padding: '32px 20px', textAlign: 'center', borderRight: i < arr.length - 1 ? '0.5px solid #e0ddd8' : 'none' }}>
-              <div id={stat.id} style={{ fontSize: '2.5rem', fontWeight: 500, color: '#1a2744', lineHeight: 1 }}>0</div>
-              <div style={{ fontSize: '11px', color: '#888', marginTop: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{stat.label}</div>
+            <div key={stat.id} className="landing-stat" style={{ padding: '32px 20px', textAlign: 'center', borderRight: i < arr.length - 1 ? '0.5px solid #e0ddd8' : 'none' }}>
+              <div id={stat.id} className="landing-stat-val" style={{ fontSize: '2.5rem', fontWeight: 500, color: '#1a2744', lineHeight: 1 }}>0</div>
+              <div className="landing-stat-lbl" style={{ fontSize: '11px', color: '#888', marginTop: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{stat.label}</div>
             </div>
           ))}
         </div>
@@ -229,10 +229,10 @@ export default function LandingPage() {
         <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginBottom: '28px' }}>
           Vidas transformadas pela Palavra e pela formação teológica
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px' }}>
+        <div className="depoimentos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px' }}>
           {depoimentos.map((d, i) => (
-            <div key={i} style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e0ddd8', overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: '8px 8px 0' }}>
-              <div style={{ width: '75%', height: '220px', borderRadius: '6px', overflow: 'hidden', borderBottom: '2px solid #c8a96e', margin: '0 auto' }}>
+            <div key={i} className="depoimento-card" style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e0ddd8', overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: '8px 8px 0' }}>
+              <div className="depoimento-foto-wrapper" style={{ width: '75%', height: '220px', borderRadius: '6px', overflow: 'hidden', borderBottom: '2px solid #c8a96e', margin: '0 auto' }}>
                 {d.foto_url ? (
                   <img src={d.foto_url} alt={d.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
@@ -243,10 +243,10 @@ export default function LandingPage() {
                   </div>
                 )}
               </div>
-              <div style={{ padding: '12px 8px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flex: 1 }}>
-                <div style={{ color: 'rgba(200,169,110,0.35)', fontSize: '26px', lineHeight: 1, fontFamily: 'Georgia, serif', marginBottom: '6px' }}>"</div>
+              <div className="depoimento-body" style={{ padding: '12px 8px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flex: 1 }}>
+                <div className="depoimento-quote-icon" style={{ color: 'rgba(200,169,110,0.35)', fontSize: '26px', lineHeight: 1, fontFamily: 'Georgia, serif', marginBottom: '6px' }}>"</div>
                 <p style={{ fontSize: '14px', color: '#555', lineHeight: 1.65, marginBottom: '12px', fontStyle: 'italic', flex: 1 }}>{d.frase}</p>
-                <div style={{ width: '28px', height: '2px', background: '#c8a96e', borderRadius: '1px', margin: '0 auto 10px' }} />
+                <div className="depoimento-divider" style={{ width: '28px', height: '2px', background: '#c8a96e', borderRadius: '1px', margin: '0 auto 10px' }} />
                 <p style={{ fontSize: '15px', fontWeight: 600, color: '#1a2744' }}>{d.nome}</p>
                 <p style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{d.turma}</p>
               </div>
@@ -257,7 +257,7 @@ export default function LandingPage() {
 
       {/* ── Sobre + Pilares ── */}
       <section id="sobre" style={{ background: '#fff', padding: '64px 40px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
+        <div className="landing-about" style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
           <div>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Sobre o Seminário</span>
             <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#1a2744', margin: '12px 0 16px', fontFamily: "'League Spartan', sans-serif", fontWeight: 800 }}>
@@ -295,7 +295,7 @@ export default function LandingPage() {
               Tudo que você precisa em um só lugar
             </h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+          <div className="landing-features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
             {funcionalidades.map(f => (
               <div key={f.titulo} style={{ background: '#fff', borderRadius: 12, padding: '24px', boxShadow: '0 2px 8px rgba(26,43,92,0.07)', border: '0.5px solid rgba(0,0,0,0.06)' }}>
                 <div style={{ width: 44, height: 44, borderRadius: 10, background: 'rgba(200,169,110,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
@@ -346,7 +346,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA Final ── */}
-      <section id="contato" style={{ background: '#f5f4f0', padding: '64px 40px', textAlign: 'center' }}>
+      <section id="contato" className="landing-cta" style={{ background: '#f5f4f0', padding: '64px 40px', textAlign: 'center' }}>
         <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#1a2744', marginBottom: 12, fontFamily: "'League Spartan', sans-serif", fontWeight: 800 }}>
           Já é aluno do Kerygma?
         </h2>
@@ -387,7 +387,7 @@ export default function LandingPage() {
       </a>
 
       {/* ── Rodapé ── */}
-      <footer style={{ background: '#111c36', padding: '20px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+      <footer className="landing-footer" style={{ background: '#111c36', padding: '20px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
           &copy; {new Date().getFullYear()} <span className="kerygma-font">Seminário Kerygma</span>
         </span>
