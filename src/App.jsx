@@ -21,7 +21,20 @@ function Layout({ children }) {
       <Navbar />
       <main className="container my-5">{children}</main>
       <footer className="text-center py-4 text-muted mt-5">
-        <small>&copy; 2026 Seminário Kerygma - Built by Davi Barbosa</small>
+        <small>
+          <i className="fab fa-whatsapp me-1" style={{ color: '#25d366' }} />
+          Encontrou algum problema? Entre em contato conosco:{' '}
+          <a
+            href="https://wa.me/5521992457885"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted fw-bold"
+          >
+            (21) 99245-7885
+          </a>
+        </small>
+        <br />
+        <small>&copy; 2026 <span className="kerygma-font">Seminário Kerygma</span> - Built by Davi Barbosa</small>
       </footer>
     </>
   )

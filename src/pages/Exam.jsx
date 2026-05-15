@@ -57,21 +57,29 @@ export default function Exam() {
 
   async function handleSubmit(e) {
     if (e?.preventDefault) e.preventDefault()
-    if (submittedRef.current) return
+    if (submittedRef.current || !submission) return
     submittedRef.current = true
     setSubmitting(true)
 
-    const total   = questions.length
-    const correct = questions.filter(q => answers[q.id] === q.correct_option).length
-    const score   = total > 0 ? Math.round((correct / total) * 100) : 0
+    try {
+      const total   = questions.length
+      const correct = questions.filter(q => answers[q.id] === q.correct_option).length
+      const score   = total > 0 ? Math.round((correct / total) * 100) : 0
 
-    await supabase.from('submissions').update({
-      score, status: 'completed', end_time: new Date().toISOString(),
-    }).eq('id', submission.id)
+      const { error } = await supabase.from('submissions').update({
+        score, status: 'completed', end_time: new Date().toISOString(),
+      }).eq('id', submission.id)
 
-    const passed = score >= parseFloat(exam?.passing_score ?? 60)
-    setResult({ score, passed })
-    setSubmitting(false)
+      if (error) throw error
+
+      const passed = score >= parseFloat(exam?.passing_score ?? 60)
+      setResult({ score, passed })
+    } catch (err) {
+      console.error('Erro ao enviar prova:', err)
+      submittedRef.current = false
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (loading) return <LoadingSpinner />

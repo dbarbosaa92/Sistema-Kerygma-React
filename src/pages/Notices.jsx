@@ -35,7 +35,7 @@ export default function Notices() {
       <div className="row mb-5">
         <div className="col-12 text-center">
           <h1 className="fw-medium text-primary display-4 mb-2">Quadro de Avisos</h1>
-          <p className="text-muted lead">Fique por dentro das últimas atualizações e comunicados do Seminário Kerygma.</p>
+          <p className="text-muted lead">Fique por dentro das últimas atualizações e comunicados do <span className="kerygma-font">Seminário Kerygma</span>.</p>
           <hr className="w-25 mx-auto border-3 border-primary opacity-75" />
         </div>
       </div>
