@@ -265,6 +265,37 @@ a:hover { color: var(--navy-hover); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
 }
 
+/* ── Landing Page — Carrossel de Docentes ── */
+.docentes-track-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+.docentes-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: scrollLeft linear infinite;
+}
+
+.docentes-track-wrapper:hover .docentes-track {
+    animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+.docente-card {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    width: 160px;
+    flex-shrink: 0;
+}
+
 /* ── Boletim Sheet ── */
 .boletim-sheet-page { max-width: 1280px; margin: 0 auto; color: var(--text-color); }
 

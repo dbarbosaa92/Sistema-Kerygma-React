@@ -4,6 +4,7 @@ import ProtectedRoute from './components/layout/ProtectedRoute'
 import Navbar from './components/layout/Navbar'
 
 import Login          from './pages/Login'
+import LandingPage    from './pages/LandingPage'
 import Dashboard      from './pages/Dashboard'
 import Course         from './pages/Course'
 import Exam           from './pages/Exam'
@@ -82,8 +83,8 @@ export default function App() {
             <ProtectedRoute requireTeacher><Layout><StudentBoletim /></Layout></ProtectedRoute>
           } />
 
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
