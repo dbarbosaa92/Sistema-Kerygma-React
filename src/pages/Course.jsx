@@ -133,6 +133,33 @@ export default function Course() {
         <div className="aula-progress-fill" style={{ width: `${progressPct}%` }} />
       </div>
 
+      {/* Botão marcar como concluída */}
+      {activeLesson && (
+        <button
+          onClick={() => handleCompleteLesson(activeLesson.id)}
+          disabled={!!progress[activeLesson.id]}
+          style={{
+            width: '100%',
+            padding: '11px',
+            borderRadius: 10,
+            border: 'none',
+            marginBottom: 14,
+            fontWeight: 600,
+            fontSize: 14,
+            cursor: progress[activeLesson.id] ? 'default' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            background: progress[activeLesson.id] ? 'rgba(46,125,82,0.12)' : '#1a2744',
+            color: progress[activeLesson.id] ? '#2e7d52' : '#ffffff',
+          }}
+        >
+          <i className={`fas ${progress[activeLesson.id] ? 'fa-check-circle' : 'fa-check'}`} />
+          {progress[activeLesson.id] ? 'Aula concluída' : 'Marcar como concluída'}
+        </button>
+      )}
+
       {/* Aulas do curso */}
       <div className="aula-section-label">Aulas do curso</div>
       {lessons.map(lesson => (

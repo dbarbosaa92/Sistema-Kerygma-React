@@ -72,6 +72,11 @@ export default function Navbar() {
           className="navbar-brand d-flex align-items-center gap-2"
           style={{ color: '#ffffff', textDecoration: 'none' }}
         >
+          <img
+            src="/logoInsta.jpg"
+            alt="Logo Kerygma"
+            style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid rgba(200,169,110,0.5)', flexShrink: 0 }}
+          />
           <strong><span className="kerygma-font">Seminário Kerygma</span></strong>
         </Link>
 

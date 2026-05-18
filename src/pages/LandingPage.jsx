@@ -32,6 +32,30 @@ export default function LandingPage() {
   const [depoimentos, setDepoimentos] = useState([])
   const [docentes,    setDocentes]    = useState([])
   const [aberto,      setAberto]      = useState(null)
+  const [interesseNome,      setInteresseNome]      = useState('')
+  const [interesseWhatsapp,  setInteresseWhatsapp]  = useState('')
+  const [interesseEnviado,   setInteresseEnviado]   = useState(false)
+  const [interesseLoading,   setInteresseLoading]   = useState(false)
+  const [interesseErro,      setInteresseErro]      = useState('')
+
+  async function handleInteresse(e) {
+    e.preventDefault()
+    if (!interesseNome.trim() || !interesseWhatsapp.trim()) return
+    setInteresseLoading(true)
+    setInteresseErro('')
+    const { error } = await supabase
+      .from('interesse_matricula')
+      .insert({ nome: interesseNome.trim(), whatsapp: interesseWhatsapp.trim() })
+    setInteresseLoading(false)
+    if (error) {
+      console.error('Erro ao enviar interesse:', error)
+      setInteresseErro('Ocorreu um erro ao enviar. Tente novamente.')
+    } else {
+      setInteresseEnviado(true)
+      setInteresseNome('')
+      setInteresseWhatsapp('')
+    }
+  }
 
   const docentesDuplicados = [...docentes, ...docentes]
   const duracaoCarrossel = `${Math.max(docentes.length, 1) * 6}s`
@@ -90,9 +114,10 @@ export default function LandingPage() {
           <span className="kerygma-font" style={{ color: '#c8a96e', fontSize: '1.2rem' }}>Seminário Kerygma</span>
         </div>
         <div className="landing-nav-links" style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
-          <a href="#sobre"    style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Sobre</a>
-          <a href="#docentes" style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Docentes</a>
-          <a href="#contato"  style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Contato</a>
+          <a href="#sobre"        style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Sobre</a>
+          <a href="#depoimentos"  style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Depoimentos</a>
+          <a href="#docentes"     style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Docentes</a>
+          <a href="#contato"      style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Contato</a>
         </div>
         <button
           onClick={() => navigate('/login')}
@@ -104,73 +129,100 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="landing-hero" style={{
-        background: '#f5f4f0',
-        padding: '48px 64px',
+        position: 'relative',
+        padding: '72px 64px',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: '40px',
-        alignItems: 'center'
+        alignItems: 'center',
+        minHeight: '520px',
+        overflow: 'hidden',
       }}>
 
+        {/* Imagem de fundo */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: "url('/sala%20com%20mais%20resolucao.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          zIndex: 0,
+        }} />
+
+        {/* Degradê: mais brilho no centro, bordas escuras */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at center, rgba(5,15,45,0.0) 0%, rgba(5,15,45,0.62) 65%, rgba(2,8,30,0.88) 100%)',
+          zIndex: 1,
+        }} />
+
         {/* Coluna esquerda — texto */}
-        <div>
+        <div style={{ position: 'relative', zIndex: 2 }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'rgba(26,39,68,0.08)',
-            color: '#1a2744',
+            background: 'rgba(255,255,255,0.12)',
+            backdropFilter: 'blur(8px)',
+            color: '#c8a96e',
             fontSize: '12px',
             padding: '5px 12px',
             borderRadius: '20px',
-            marginBottom: '16px'
+            marginBottom: '16px',
+            border: '1px solid rgba(200,169,110,0.35)',
           }}>
             <i className="ti ti-award" style={{ fontSize: '14px' }} />
             Formação Teológica
           </div>
           <h1 style={{
-            fontSize: '2.2rem',
-            fontWeight: 500,
-            color: '#1a2744',
-            lineHeight: 1.25,
-            marginBottom: '12px'
+            fontSize: '2.4rem',
+            fontWeight: 700,
+            color: '#ffffff',
+            lineHeight: 1.2,
+            marginBottom: '12px',
+            textShadow: '0 2px 12px rgba(0,0,0,0.4)',
           }}>
             Formando servos<br />para o Reino
           </h1>
           <p style={{
             fontSize: '14px',
-            color: '#666',
+            color: 'rgba(255,255,255,0.78)',
             lineHeight: 1.7,
             marginBottom: '24px',
-            maxWidth: '420px'
+            maxWidth: '420px',
           }}>
             Estude teologia com profundidade, flexibilidade e acompanhamento completo pela Sala Virtual Kerygma.
           </p>
           <button
             onClick={() => navigate('/login')}
             style={{
-              background: '#1a2744',
-              color: '#ffffff',
+              background: '#c8a96e',
+              color: '#1a2744',
               fontSize: '14px',
-              fontWeight: 500,
+              fontWeight: 700,
               padding: '12px 24px',
               borderRadius: '8px',
               border: 'none',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
             }}
           >
             Acessar a Sala Virtual →
           </button>
         </div>
 
-        {/* Coluna direita — card azul com funcionalidades */}
+        {/* Coluna direita — card com funcionalidades */}
         <div className="landing-hero-right" style={{
-          background: '#1a2744',
+          background: 'rgba(26,39,68,0.82)',
+          backdropFilter: 'blur(14px)',
           borderRadius: '14px',
-          padding: '24px'
+          padding: '24px',
+          border: '1px solid rgba(255,255,255,0.1)',
+          position: 'relative',
+          zIndex: 2,
         }}>
           <div style={{
             color: '#c8a96e',
@@ -214,43 +266,6 @@ export default function LandingPage() {
             <div key={stat.id} className="landing-stat" style={{ padding: '32px 20px', textAlign: 'center', borderRight: i < arr.length - 1 ? '0.5px solid #e0ddd8' : 'none' }}>
               <div id={stat.id} className="landing-stat-val" style={{ fontSize: '2.5rem', fontWeight: 500, color: '#1a2744', lineHeight: 1 }}>0</div>
               <div className="landing-stat-lbl" style={{ fontSize: '11px', color: '#888', marginTop: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Depoimentos ── */}
-      <section style={{ background: '#f5f4f0', padding: '40px 64px' }}>
-        <p style={{ fontSize: '11px', fontWeight: 500, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '6px' }}>
-          Depoimentos
-        </p>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 500, color: '#1a2744', textAlign: 'center', marginBottom: '4px' }}>
-          O que nossos alunos dizem sobre o Kerygma
-        </h2>
-        <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginBottom: '28px' }}>
-          Vidas transformadas pela Palavra e pela formação teológica
-        </p>
-        <div className="depoimentos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px' }}>
-          {depoimentos.map((d, i) => (
-            <div key={i} className="depoimento-card" style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e0ddd8', overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: '8px 8px 0' }}>
-              <div className="depoimento-foto-wrapper" style={{ width: '75%', height: '220px', borderRadius: '6px', overflow: 'hidden', borderBottom: '2px solid #c8a96e', margin: '0 auto' }}>
-                {d.foto_url ? (
-                  <img src={d.foto_url} alt={d.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <div style={{ width: '100%', height: '100%', background: '#1a2744', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: '#c8a96e', fontSize: '36px', fontWeight: 500 }}>
-                      {d.nome.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="depoimento-body" style={{ padding: '12px 8px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flex: 1 }}>
-                <div className="depoimento-quote-icon" style={{ color: 'rgba(200,169,110,0.35)', fontSize: '26px', lineHeight: 1, fontFamily: 'Georgia, serif', marginBottom: '6px' }}>"</div>
-                <p style={{ fontSize: '14px', color: '#555', lineHeight: 1.65, marginBottom: '12px', fontStyle: 'italic', flex: 1 }}>{d.frase}</p>
-                <div className="depoimento-divider" style={{ width: '28px', height: '2px', background: '#c8a96e', borderRadius: '1px', margin: '0 auto 10px' }} />
-                <p style={{ fontSize: '15px', fontWeight: 600, color: '#1a2744' }}>{d.nome}</p>
-                <p style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{d.turma}</p>
-              </div>
             </div>
           ))}
         </div>
@@ -301,6 +316,43 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Depoimentos ── */}
+      <section id="depoimentos" style={{ background: '#f5f4f0', padding: '40px 64px' }}>
+        <p style={{ fontSize: '11px', fontWeight: 500, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '6px' }}>
+          Depoimentos
+        </p>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 500, color: '#1a2744', textAlign: 'center', marginBottom: '4px' }}>
+          O que nossos alunos dizem sobre o Kerygma
+        </h2>
+        <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginBottom: '28px' }}>
+          Vidas transformadas pela Palavra e pela formação teológica
+        </p>
+        <div className="depoimentos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px' }}>
+          {depoimentos.map((d, i) => (
+            <div key={i} className="depoimento-card" style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e0ddd8', overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: '8px 8px 0' }}>
+              <div className="depoimento-foto-wrapper" style={{ width: '75%', height: '220px', borderRadius: '6px', overflow: 'hidden', borderBottom: '2px solid #c8a96e', margin: '0 auto' }}>
+                {d.foto_url ? (
+                  <img src={d.foto_url} alt={d.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <div style={{ width: '100%', height: '100%', background: '#1a2744', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: '#c8a96e', fontSize: '36px', fontWeight: 500 }}>
+                      {d.nome.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="depoimento-body" style={{ padding: '12px 8px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flex: 1 }}>
+                <div className="depoimento-quote-icon" style={{ color: 'rgba(200,169,110,0.35)', fontSize: '26px', lineHeight: 1, fontFamily: 'Georgia, serif', marginBottom: '6px' }}>"</div>
+                <p style={{ fontSize: '14px', color: '#555', lineHeight: 1.65, marginBottom: '12px', fontStyle: 'italic', flex: 1 }}>{d.frase}</p>
+                <div className="depoimento-divider" style={{ width: '28px', height: '2px', background: '#c8a96e', borderRadius: '1px', margin: '0 auto 10px' }} />
+                <p style={{ fontSize: '15px', fontWeight: 600, color: '#1a2744' }}>{d.nome}</p>
+                <p style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{d.turma}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── Funcionalidades ── */}
       <section style={{ background: '#f5f4f0', padding: '64px 40px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -321,6 +373,87 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Convite para novos alunos ── */}
+      <section>
+        <div className="secao-interesse-top" style={{ background: '#1a2744', padding: '48px 64px', textAlign: 'center' }}>
+          <p style={{ fontSize: '11px', fontWeight: 500, color: 'rgba(200,169,110,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>
+            Faça parte do Kerygma
+          </p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: 500, color: '#fff', lineHeight: 1.3, marginBottom: '10px' }}>
+            Sua jornada começa aqui
+          </h2>
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto' }}>
+            Deixe seu nome e WhatsApp e nossa equipe entrará em contato com todas as informações sobre matrícula.
+          </p>
+        </div>
+
+        <div className="secao-interesse-bottom" style={{ background: '#fff', padding: '40px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
+
+          {/* Formulário */}
+          <div>
+            <p style={{ fontSize: '15px', fontWeight: 500, color: '#1a2744', marginBottom: '16px' }}>
+              Quero saber mais
+            </p>
+            {interesseEnviado ? (
+              <div style={{ background: 'rgba(46,125,82,0.1)', border: '1px solid rgba(46,125,82,0.3)', borderRadius: '10px', padding: '20px', textAlign: 'center', color: '#2E7D52', fontSize: '14px' }}>
+                <i className="ti ti-check" style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }} />
+                Recebemos seu interesse! Em breve entraremos em contato.
+              </div>
+            ) : (
+              <form onSubmit={handleInteresse} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <input
+                  type="text"
+                  placeholder="Seu nome completo"
+                  value={interesseNome}
+                  onChange={e => setInteresseNome(e.target.value)}
+                  required
+                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e0ddd8', borderRadius: '8px', fontSize: '13px', background: '#fafafa' }}
+                />
+                <input
+                  type="tel"
+                  placeholder="Seu WhatsApp (ex: 27 99999-9999)"
+                  value={interesseWhatsapp}
+                  onChange={e => setInteresseWhatsapp(e.target.value)}
+                  required
+                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e0ddd8', borderRadius: '8px', fontSize: '13px', background: '#fafafa' }}
+                />
+                {interesseErro && (
+                  <p style={{ margin: 0, fontSize: 12, color: '#b42318' }}>{interesseErro}</p>
+                )}
+                <button
+                  type="submit"
+                  disabled={interesseLoading}
+                  style={{ background: '#1a2744', color: '#c8a96e', fontSize: '13px', fontWeight: 500, padding: '11px', borderRadius: '8px', border: 'none', cursor: interesseLoading ? 'default' : 'pointer', width: '100%', opacity: interesseLoading ? 0.7 : 1 }}
+                >
+                  {interesseLoading ? 'Enviando...' : 'Enviar interesse'}
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Benefícios */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {[
+              { icone: 'ti ti-clock',       titulo: 'Estude no seu tempo',     desc: 'Aulas gravadas disponíveis 24h' },
+              { icone: 'ti ti-bible',       titulo: 'Base bíblica sólida',     desc: 'Currículo teológico aprofundado' },
+              { icone: 'ti ti-certificate', titulo: 'Certificado reconhecido', desc: 'Ao concluir o curso' },
+              { icone: 'ti ti-users',       titulo: '+200 alunos formados',    desc: 'Junte-se à comunidade' },
+            ].map((b, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '38px', height: '38px', borderRadius: '9px', background: 'rgba(26,39,68,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <i className={b.icone} style={{ color: '#c8a96e', fontSize: '18px' }} />
+                </div>
+                <div>
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: '#1a2744' }}>{b.titulo}</span>
+                  <span style={{ fontSize: '12px', color: '#888', marginLeft: '6px' }}>— {b.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </section>
 
@@ -411,6 +544,15 @@ export default function LandingPage() {
           (27) 99792-7725
         </span>
       </footer>
+
+      <div
+        className="landing-fab"
+        onClick={() => navigate('/login')}
+        style={{ cursor: 'pointer' }}
+      >
+        <i className="ti ti-door-enter" />
+        <span>Acessar a Sala Virtual</span>
+      </div>
 
     </div>
   )

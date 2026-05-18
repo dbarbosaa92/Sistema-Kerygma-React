@@ -132,7 +132,24 @@ export default function Boletim() {
             ))}
           </section>
 
-          <section className="sheet-table-card">
+          <div style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 10,
+            background: 'rgba(200,169,110,0.12)',
+            border: '1.5px solid #c8a96e',
+            borderRadius: 10,
+            padding: '12px 16px',
+            marginBottom: 20,
+          }}>
+            <i className="fas fa-info-circle" style={{ color: '#c8a96e', fontSize: 18, marginTop: 1, flexShrink: 0 }} />
+            <p style={{ margin: 0, fontSize: 14, color: '#1a2744', lineHeight: 1.6 }}>
+              <strong>Média mínima para aprovação:</strong> a nota mínima exigida em todas as matérias é de <strong>70%</strong>.
+            </p>
+          </div>
+
+          {/* Desktop: tabela */}
+          <section className="sheet-table-card d-none d-md-block">
             <div className="sheet-table-header">
               <div>
                 <h2>Boletim geral</h2>
@@ -144,8 +161,6 @@ export default function Boletim() {
                 <thead>
                   <tr>
                     <th>Matéria</th>
-                    <th>Avaliações</th>
-                    <th>Nota mínima</th>
                     <th>Nota do aluno</th>
                     <th>Situação</th>
                     <th>Ação</th>
@@ -158,8 +173,6 @@ export default function Boletim() {
                         <div className="subject-main">{row.title}</div>
                         <div className="subject-subline">{row.progressLabel}</div>
                       </td>
-                      <td>{row.assessmentLabel}</td>
-                      <td>{row.minimumScore}</td>
                       <td className="sheet-score">{row.score}</td>
                       <td>
                         <span className={`sheet-status ${row.statusClass}`}>{row.status}</span>
@@ -172,6 +185,43 @@ export default function Boletim() {
                         ) : (
                           <span className="sheet-action-disabled">Sem ação</span>
                         )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Mobile: tabela compacta */}
+          <section className="sheet-table-card d-md-none">
+            <div className="table-responsive">
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(26,43,92,0.04)', borderBottom: '0.5px solid rgba(0,0,0,0.08)' }}>
+                    <th style={{ padding: '10px 12px', fontSize: 11, fontWeight: 600, color: '#1a2744', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'left' }}>Matéria</th>
+                    <th style={{ padding: '10px 8px', fontSize: 11, fontWeight: 600, color: '#1a2744', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'center' }}>Nota</th>
+                    <th style={{ padding: '10px 8px', fontSize: 11, fontWeight: 600, color: '#1a2744', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'center' }}>Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => (
+                    <tr key={row.id} style={{ borderBottom: '0.5px solid rgba(0,0,0,0.05)', background: i % 2 === 0 ? '#fff' : 'rgba(245,244,240,0.55)' }}>
+                      <td style={{ padding: '10px 12px' }}>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: '#1a2744' }}>{row.title}</div>
+                        {row.actionHref && (
+                          <Link to={row.actionHref} style={{ fontSize: 11, color: '#c8a96e', fontWeight: 500, textDecoration: 'none' }}>
+                            {row.actionLabel} →
+                          </Link>
+                        )}
+                      </td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center', fontWeight: 700, fontSize: 15, color: '#1a2744' }}>
+                        {row.score}
+                      </td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>
+                        <span className={`sheet-status ${row.statusClass}`} style={{ fontSize: 10, padding: '4px 8px', minWidth: 'unset' }}>
+                          {row.status}
+                        </span>
                       </td>
                     </tr>
                   ))}
