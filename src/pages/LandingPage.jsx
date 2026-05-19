@@ -146,7 +146,7 @@ export default function LandingPage() {
         </div>
         <button
           onClick={() => navigate('/login')}
-          style={{ background: '#c8a96e', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 20px', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}
+          style={{ background: '#c8a96e', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 26px', fontWeight: 700, fontSize: 15, cursor: 'pointer', boxShadow: '0 4px 14px rgba(200,169,110,0.45)', letterSpacing: '0.01em' }}
         >
           Acessar Sala Virtual
         </button>
@@ -211,15 +211,17 @@ export default function LandingPage() {
             style={{
               background: '#c8a96e',
               color: '#1a2744',
-              fontSize: '14px',
-              fontWeight: 700,
-              padding: '12px 24px',
-              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: 800,
+              padding: '15px 32px',
+              borderRadius: '10px',
               border: 'none',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '10px',
+              boxShadow: '0 6px 24px rgba(200,169,110,0.5)',
+              letterSpacing: '0.02em',
             }}
           >
             Acessar a Sala Virtual →
@@ -517,7 +519,7 @@ export default function LandingPage() {
         </p>
         <button
           onClick={() => navigate('/login')}
-          style={{ background: '#c8a96e', color: '#fff', border: 'none', borderRadius: 10, padding: '14px 36px', fontWeight: 700, fontSize: 16, cursor: 'pointer' }}
+          style={{ background: '#c8a96e', color: '#fff', border: 'none', borderRadius: 10, padding: '16px 48px', fontWeight: 800, fontSize: 17, cursor: 'pointer', boxShadow: '0 6px 24px rgba(200,169,110,0.45)', letterSpacing: '0.02em' }}
         >
           Acessar a Sala Virtual
         </button>
