@@ -100,6 +100,15 @@ export default function Course() {
     {/* ── Layout Mobile ── */}
     <div className="d-md-none aula-mobile-wrapper">
 
+      {/* Botão voltar */}
+      <Link
+        to="/dashboard"
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#1a2744', textDecoration: 'none', fontSize: 14, fontWeight: 600, marginBottom: 14, background: '#fff', border: '1.5px solid #e0ddd8', borderRadius: 10, padding: '9px 16px' }}
+      >
+        <i className="fas fa-arrow-left" style={{ fontSize: 13 }} />
+        Voltar
+      </Link>
+
       {/* Cabeçalho */}
       <div className="d-flex justify-content-between align-items-center mb-2">
         <span style={{ color: '#1a2744', fontSize: 14, fontWeight: 500 }}>{course.title}</span>
@@ -298,12 +307,21 @@ export default function Course() {
 
       {/* ── Conteúdo principal ── */}
       <div className="col-md-9">
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb bg-white p-3 rounded-pill shadow-sm">
-            <li className="breadcrumb-item"><Link to="/dashboard">Cursos</Link></li>
-            <li className="breadcrumb-item active">{course.title}</li>
-          </ol>
-        </nav>
+        <div className="d-flex align-items-center gap-3 mb-3">
+          <Link
+            to="/dashboard"
+            className="btn btn-outline-primary btn-sm px-3"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+          >
+            <i className="fas fa-arrow-left" /> Voltar
+          </Link>
+          <nav aria-label="breadcrumb" className="mb-0">
+            <ol className="breadcrumb bg-white px-3 py-2 rounded-pill shadow-sm mb-0">
+              <li className="breadcrumb-item"><Link to="/dashboard">Cursos</Link></li>
+              <li className="breadcrumb-item active">{course.title}</li>
+            </ol>
+          </nav>
+        </div>
 
         {activeLesson ? (
           <div className="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">

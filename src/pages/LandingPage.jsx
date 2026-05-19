@@ -37,6 +37,31 @@ export default function LandingPage() {
   const [interesseEnviado,   setInteresseEnviado]   = useState(false)
   const [interesseLoading,   setInteresseLoading]   = useState(false)
   const [interesseErro,      setInteresseErro]      = useState('')
+  const [navScrolled,        setNavScrolled]        = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setNavScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible')
+        })
+      },
+      { threshold: 0.15 }
+    )
+    document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  function scrollTo(id) {
+    const el = document.getElementById(id)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   async function handleInteresse(e) {
     e.preventDefault()
@@ -108,16 +133,16 @@ export default function LandingPage() {
     <div style={{ fontFamily: "'Source Sans 3', sans-serif", color: '#2e3442' }}>
 
       {/* ── Navbar ── */}
-      <nav className="landing-nav" style={{ background: '#1a2744', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+      <nav className={`landing-nav${navScrolled ? ' landing-nav--scrolled' : ''}`} style={{ padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src="/logoInsta.jpg" alt="Seminário Kerygma" style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid rgba(200,169,110,0.5)' }} />
           <span className="kerygma-font" style={{ color: '#c8a96e', fontSize: '1.2rem' }}>Seminário Kerygma</span>
         </div>
         <div className="landing-nav-links" style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
-          <a href="#sobre"        style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Sobre</a>
-          <a href="#depoimentos"  style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Depoimentos</a>
-          <a href="#docentes"     style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Docentes</a>
-          <a href="#contato"      style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: 14 }}>Contato</a>
+          <span onClick={() => scrollTo('sobre')}        style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, cursor: 'pointer' }}>Sobre</span>
+          <span onClick={() => scrollTo('depoimentos')}  style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, cursor: 'pointer' }}>Depoimentos</span>
+          <span onClick={() => scrollTo('docentes')}     style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, cursor: 'pointer' }}>Docentes</span>
+          <span onClick={() => scrollTo('contato')}      style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, cursor: 'pointer' }}>Contato</span>
         </div>
         <button
           onClick={() => navigate('/login')}
@@ -135,7 +160,7 @@ export default function LandingPage() {
         gridTemplateColumns: '1fr 1fr',
         gap: '40px',
         alignItems: 'center',
-        minHeight: '520px',
+        minHeight: '100vh',
         overflow: 'hidden',
       }}>
 
@@ -175,23 +200,10 @@ export default function LandingPage() {
             <i className="ti ti-award" style={{ fontSize: '14px' }} />
             Formação Teológica
           </div>
-          <h1 style={{
-            fontSize: '2.4rem',
-            fontWeight: 700,
-            color: '#ffffff',
-            lineHeight: 1.2,
-            marginBottom: '12px',
-            textShadow: '0 2px 12px rgba(0,0,0,0.4)',
-          }}>
+          <h1 className="landing-hero-title" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.4)', marginBottom: '16px' }}>
             Formando servos<br />para o Reino
           </h1>
-          <p style={{
-            fontSize: '14px',
-            color: 'rgba(255,255,255,0.78)',
-            lineHeight: 1.7,
-            marginBottom: '24px',
-            maxWidth: '420px',
-          }}>
+          <p className="landing-hero-subtitle" style={{ marginBottom: '24px' }}>
             Estude teologia com profundidade, flexibilidade e acompanhamento completo pela Sala Virtual Kerygma.
           </p>
           <button
@@ -272,7 +284,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Sobre + Pilares ── */}
-      <section id="sobre" style={{ background: '#fff', padding: '64px 40px' }}>
+      <section id="sobre" className="fade-in-up" style={{ background: '#fff', padding: '64px 40px' }}>
         <div className="landing-about" style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
           <div>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Sobre o Seminário</span>
@@ -317,7 +329,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Depoimentos ── */}
-      <section id="depoimentos" style={{ background: '#f5f4f0', padding: '40px 64px' }}>
+      <section id="depoimentos" className="fade-in-up" style={{ background: '#f5f4f0', padding: '40px 64px' }}>
         <p style={{ fontSize: '11px', fontWeight: 500, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '6px' }}>
           Depoimentos
         </p>
@@ -354,7 +366,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Funcionalidades ── */}
-      <section style={{ background: '#f5f4f0', padding: '64px 40px' }}>
+      <section className="fade-in-up" style={{ background: '#f5f4f0', padding: '64px 40px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Plataforma</span>
@@ -390,11 +402,11 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="secao-interesse-bottom" style={{ background: '#fff', padding: '40px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
+        <div className="secao-interesse-bottom" style={{ background: '#f5f4f0', padding: '40px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
 
-          {/* Formulário */}
-          <div>
-            <p style={{ fontSize: '15px', fontWeight: 500, color: '#1a2744', marginBottom: '16px' }}>
+          {/* Formulário em card branco */}
+          <div style={{ background: '#fff', borderRadius: '14px', border: '0.5px solid #e0ddd8', padding: '28px 24px' }}>
+            <p style={{ fontSize: '15px', fontWeight: 500, color: '#1a2744', marginBottom: '18px' }}>
               Quero saber mais
             </p>
             {interesseEnviado ? (
@@ -403,22 +415,24 @@ export default function LandingPage() {
                 Recebemos seu interesse! Em breve entraremos em contato.
               </div>
             ) : (
-              <form onSubmit={handleInteresse} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <form onSubmit={handleInteresse} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label style={{ fontSize: '11px', color: '#888', marginBottom: '4px' }}>Nome completo</label>
                 <input
                   type="text"
                   placeholder="Seu nome completo"
                   value={interesseNome}
                   onChange={e => setInteresseNome(e.target.value)}
                   required
-                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e0ddd8', borderRadius: '8px', fontSize: '13px', background: '#fafafa' }}
+                  style={{ width: '100%', padding: '10px 14px', border: '1.5px solid #e0ddd8', borderRadius: '8px', fontSize: '13px', background: '#fff', marginBottom: '12px' }}
                 />
+                <label style={{ fontSize: '11px', color: '#888', marginBottom: '4px' }}>WhatsApp</label>
                 <input
                   type="tel"
-                  placeholder="Seu WhatsApp (ex: 27 99999-9999)"
+                  placeholder="27 99999-9999"
                   value={interesseWhatsapp}
                   onChange={e => setInteresseWhatsapp(e.target.value)}
                   required
-                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #e0ddd8', borderRadius: '8px', fontSize: '13px', background: '#fafafa' }}
+                  style={{ width: '100%', padding: '10px 14px', border: '1.5px solid #e0ddd8', borderRadius: '8px', fontSize: '13px', background: '#fff', marginBottom: '4px' }}
                 />
                 {interesseErro && (
                   <p style={{ margin: 0, fontSize: 12, color: '#b42318' }}>{interesseErro}</p>
@@ -426,7 +440,7 @@ export default function LandingPage() {
                 <button
                   type="submit"
                   disabled={interesseLoading}
-                  style={{ background: '#1a2744', color: '#c8a96e', fontSize: '13px', fontWeight: 500, padding: '11px', borderRadius: '8px', border: 'none', cursor: interesseLoading ? 'default' : 'pointer', width: '100%', opacity: interesseLoading ? 0.7 : 1 }}
+                  style={{ width: '100%', marginTop: '14px', background: '#1a2744', color: '#fff', border: 'none', padding: '12px', borderRadius: '8px', fontSize: '13px', fontWeight: 500, cursor: interesseLoading ? 'default' : 'pointer', opacity: interesseLoading ? 0.7 : 1 }}
                 >
                   {interesseLoading ? 'Enviando...' : 'Enviar interesse'}
                 </button>
@@ -435,20 +449,20 @@ export default function LandingPage() {
           </div>
 
           {/* Benefícios */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {[
               { icone: 'ti ti-clock',       titulo: 'Estude no seu tempo',     desc: 'Aulas gravadas disponíveis 24h' },
               { icone: 'ti ti-bible',       titulo: 'Base bíblica sólida',     desc: 'Currículo teológico aprofundado' },
               { icone: 'ti ti-certificate', titulo: 'Certificado reconhecido', desc: 'Ao concluir o curso' },
               { icone: 'ti ti-users',       titulo: '+200 alunos formados',    desc: 'Junte-se à comunidade' },
             ].map((b, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '38px', height: '38px', borderRadius: '9px', background: 'rgba(26,39,68,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#fff', border: '0.5px solid #e0ddd8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <i className={b.icone} style={{ color: '#c8a96e', fontSize: '18px' }} />
                 </div>
                 <div>
-                  <span style={{ fontSize: '13px', fontWeight: 500, color: '#1a2744' }}>{b.titulo}</span>
-                  <span style={{ fontSize: '12px', color: '#888', marginLeft: '6px' }}>— {b.desc}</span>
+                  <p style={{ fontSize: '13px', fontWeight: 500, color: '#1a2744', marginBottom: '2px' }}>{b.titulo}</p>
+                  <p style={{ fontSize: '11px', color: '#888', margin: 0 }}>{b.desc}</p>
                 </div>
               </div>
             ))}
@@ -458,7 +472,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Corpo Docente ── */}
-      <section id="docentes" style={{ background: '#1a2744', padding: '64px 0' }}>
+      <section id="docentes" className="fade-in-up" style={{ background: '#1a2744', padding: '64px 0' }}>
         <div style={{ textAlign: 'center', marginBottom: 36, padding: '0 40px' }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: '#c8a96e', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Quem ensina</span>
           <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#fff', margin: '10px 0 0', fontFamily: "'League Spartan', sans-serif", fontWeight: 800 }}>
@@ -494,7 +508,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA Final ── */}
-      <section id="contato" className="landing-cta" style={{ background: '#f5f4f0', padding: '64px 40px', textAlign: 'center' }}>
+      <section id="contato" className="landing-cta fade-in-up" style={{ background: '#f5f4f0', padding: '64px 40px', textAlign: 'center' }}>
         <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#1a2744', marginBottom: 12, fontFamily: "'League Spartan', sans-serif", fontWeight: 800 }}>
           Já é aluno do Kerygma?
         </h2>

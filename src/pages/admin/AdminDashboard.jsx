@@ -316,7 +316,10 @@ export default function AdminDashboard() {
                   <i className={`fas ${tab.icon} me-2`} /> {tab.label}
                 </button>
               ))}
-              <div className="p-3">
+              <div className="p-3 d-flex flex-column gap-2">
+                <Link to="/admin/matriculas" className="btn btn-outline-warning w-100 rounded-pill btn-sm">
+                  <i className="fas fa-id-card me-2" /> Matrículas
+                </Link>
                 <Link to="/dashboard" className="btn btn-outline-secondary w-100 rounded-pill btn-sm">
                   <i className="fas fa-arrow-left me-2" /> Voltar ao App
                 </Link>

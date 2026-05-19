@@ -10,11 +10,12 @@ import Course         from './pages/Course'
 import Exam           from './pages/Exam'
 import Boletim        from './pages/Boletim'
 import Notices        from './pages/Notices'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import CourseEdit     from './pages/admin/CourseEdit'
-import ExamEdit       from './pages/admin/ExamEdit'
-import UserEdit       from './pages/admin/UserEdit'
-import StudentBoletim from './pages/admin/StudentBoletim'
+import AdminDashboard      from './pages/admin/AdminDashboard'
+import CourseEdit          from './pages/admin/CourseEdit'
+import ExamEdit            from './pages/admin/ExamEdit'
+import UserEdit            from './pages/admin/UserEdit'
+import StudentBoletim      from './pages/admin/StudentBoletim'
+import GerenciarMatriculas from './pages/admin/GerenciarMatriculas'
 
 function Layout({ children }) {
   return (
@@ -81,6 +82,9 @@ export default function App() {
           } />
           <Route path="/admin/students/:userId/boletim" element={
             <ProtectedRoute requireTeacher><Layout><StudentBoletim /></Layout></ProtectedRoute>
+          } />
+          <Route path="/admin/matriculas" element={
+            <ProtectedRoute requireTeacher><Layout><GerenciarMatriculas /></Layout></ProtectedRoute>
           } />
 
           <Route path="/" element={<LandingPage />} />
