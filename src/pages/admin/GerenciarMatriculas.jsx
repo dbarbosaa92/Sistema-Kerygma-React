@@ -277,16 +277,14 @@ export default function GerenciarMatriculas() {
                         >
                           Selecionar alunos
                         </button>
-                        {(!temColunaStatus || c.status !== 'rascunho') && c.totalMatriculas > 0 && (
-                          <button
-                            className="btn btn-sm"
-                            style={{ background: 'transparent', color: '#B42318', border: '1px solid #B42318' }}
-                            onClick={() => revogarCourse(c.id)}
-                            disabled={loading}
-                          >
-                            Revogar acesso
-                          </button>
-                        )}
+                        <button
+                          className="btn btn-sm"
+                          style={{ background: '#B42318', color: '#fff', border: 'none' }}
+                          onClick={() => revogarCourse(c.id)}
+                          disabled={loading}
+                        >
+                          Revogar acesso
+                        </button>
                       </div>
                     </td>
                   </tr>

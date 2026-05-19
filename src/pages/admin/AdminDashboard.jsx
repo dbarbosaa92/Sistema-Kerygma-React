@@ -318,7 +318,7 @@ export default function AdminDashboard() {
               ))}
               <div className="p-3 d-flex flex-column gap-2">
                 <Link to="/admin/matriculas" className="btn btn-outline-warning w-100 rounded-pill btn-sm">
-                  <i className="fas fa-id-card me-2" /> Matrículas
+                  <i className="fas fa-id-card me-2" /> Acesso a aulas
                 </Link>
                 <Link to="/dashboard" className="btn btn-outline-secondary w-100 rounded-pill btn-sm">
                   <i className="fas fa-arrow-left me-2" /> Voltar ao App
